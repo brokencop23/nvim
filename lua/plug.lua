@@ -53,6 +53,38 @@ return require('packer').startup(
     use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+    use 'L3MON4D3/LuaSnip' -- Snippets plugink
+    use {
+	  "startup-nvim/startup.nvim",
+	  requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+	  config = function()
+	    require"startup".setup()
+	  end
+	}
+	use 'mfussenegger/nvim-dap'
+	use 'mfussenegger/nvim-dap-python'
+	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"} }
+	use 'folke/neodev.nvim'
+	use({
+	  "epwalsh/obsidian.nvim",
+	  tag = "*",  -- recommended, use latest release instead of latest commit
+	  requires = {
+	    -- Required.
+	    "nvim-lua/plenary.nvim",
+
+	    -- see below for full list of optional dependencies 👇
+	  },
+	  config = function()
+	    require("obsidian").setup({
+	      workspaces = {
+		{
+		  name = "personal",
+		  path = "~/vaults/personal",
+		},
+	      },
+	    })
+	  end,
+	})
 
   end
 )

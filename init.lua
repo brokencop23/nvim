@@ -32,6 +32,8 @@ vim.api.nvim_set_keymap('n', '<Space>tf', ':ToggleTerm direction=float<CR>', {no
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>u', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Space>bb', ':BufferLinePick<CR>', {noremap=true, silent=true})
+vim.g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 
 
 
@@ -81,6 +83,7 @@ require('lualine').setup {
 }
 
 
+local luasnip = require('luasnip')
 local cmp = require 'cmp'
 cmp.setup {
   snippet = {
@@ -121,3 +124,42 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+require("startup").setup({theme = "evil"})
+require('dap-python').setup('~/.venvs/debugpy/bin/python')
+require("obsidian").setup({
+	workspaces = {
+		{ name="personal", path="~/vaults/personal" }
+	}
+})
+
+local dap = require("dap")
+local dap = require('dap')
+
+-- Start or continue debugging
+vim.api.nvim_set_keymap('n', '<Leader>dc', '<Cmd>lua require"dap".continue()<CR>', { noremap = true, silent = true })
+
+-- Step over an instruction
+vim.api.nvim_set_keymap('n', '<F10>', '<Cmd>lua require"dap".step_over()<CR>', { noremap = true, silent = true })
+
+-- Step into an instruction
+vim.api.nvim_set_keymap('n', '<F11>', '<Cmd>lua require"dap".step_into()<CR>', { noremap = true, silent = true })
+
+-- Step out of an instruction
+vim.api.nvim_set_keymap('n', '<F12>', '<Cmd>lua require"dap".step_out()<CR>', { noremap = true, silent = true })
+
+-- Toggle breakpoint
+vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>lua require"dap".toggle_breakpoint()<CR>', { noremap = true, silent = true })
+
+-- Set a conditional breakpoint
+vim.api.nvim_set_keymap('n', '<F8>', '<Cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>', { noremap = true, silent = true })
+
+-- View variables
+vim.api.nvim_set_keymap('n', '<Leader>v', '<Cmd>lua require"dap.ui.widgets".sidebar(require"dap.ui.widgets".scopes).open()<CR>', { noremap = true, silent = true })
+
+-- Evaluate expression
+vim.api.nvim_set_keymap('n', '<Leader>e', '<Cmd>lua require"dap.ui.widgets".hover()<CR>', { noremap = true, silent = true })
+
+-- Repl
+vim.api.nvim_set_keymap('n', '<Leader>r', '<Cmd>lua require"dap".repl.open()<CR>', { noremap = true, silent = true })
+
