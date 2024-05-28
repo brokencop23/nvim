@@ -1,6 +1,6 @@
 return {
-    "EdenEast/nightfox.nvim",
+    "rebelot/kanagawa.nvim",
     config = function()
-        require("nightfox").setup()
+        require("kanagawa").setup()
     end
 }
