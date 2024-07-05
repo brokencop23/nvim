@@ -114,6 +114,11 @@ return {
                 }
             }
 
+            lspconfig.clangd.setup{
+                on_attach = on_attach,
+                capabilities = capabilities,
+            }
+
             -- Ruff LSP setup
             lspconfig.ruff_lsp.setup{
               on_attach = on_attach,
