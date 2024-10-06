@@ -1,6 +1,9 @@
 return {
-    "rebelot/kanagawa.nvim",
+    --"rebelot/kanagawa.nvim",
+    "rose-pine/neovim",
     config = function()
-        require("kanagawa").setup()
+        require("rose-pine").setup({
+            variant = "moon", -- main, moon, dawn
+        })
     end
 }
