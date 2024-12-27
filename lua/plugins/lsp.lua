@@ -18,7 +18,7 @@ return {
 			require("mason").setup()
 			require("mason-lspconfig").setup({
 				ensure_installed = {
-                    "ruff_lsp",
+                    "ruff",
                     "pyright"
 				},
 				automatic_installation = true,
@@ -79,7 +79,7 @@ return {
             local lspconfig = require("lspconfig")
 
             local on_attach = function(client, bufnr)
-                if client.name == 'ruff_lsp' then
+                if client.name == 'ruff' then
                     client.server_capabilities.hoverProvider = true
                 end
                 if client.name == 'pyright' then
@@ -115,7 +115,7 @@ return {
             }
 
             -- Ruff LSP setup
-            lspconfig.ruff_lsp.setup{
+            lspconfig.ruff.setup{
               on_attach = on_attach,
               capabilities = capabilities,
               init_options = {

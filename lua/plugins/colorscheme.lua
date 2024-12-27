@@ -1,9 +1,14 @@
 return {
     --"rebelot/kanagawa.nvim",
-    "rose-pine/neovim",
+    -- "rose-pine/neovim",
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
     config = function()
-        require("rose-pine").setup({
-            variant = "moon", -- main, moon, dawn
+        require("catppuccin").setup({
+            flavour = "mocha",
+            term_color = false,
+            transparent_background = false
         })
     end
 }

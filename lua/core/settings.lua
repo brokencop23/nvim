@@ -9,4 +9,4 @@ vim.opt.termguicolors = true         -- Enable 24-bit RGB color
 vim.opt.background = "dark"          -- Set background to dark
 
 -- Set colorscheme
-vim.cmd([[colorscheme rose-pine]])
+vim.cmd([[colorscheme catppuccin]])
