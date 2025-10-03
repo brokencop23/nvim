@@ -6,7 +6,8 @@ return {
             formatters_by_ft = {
                 lua = { "stylua" },
                 python = { "isort", "black" },
-                rust = { "rustfmt", lst_format="fallback" }
+                rust = { "rustfmt", lst_format="fallback" },
+                go = { "gofmt" }
             }
         })
     end
