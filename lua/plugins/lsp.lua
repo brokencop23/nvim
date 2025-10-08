@@ -125,7 +125,7 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
-                "ruff_lsp",
+                "ruff",
                 "basedpyright", -- type checker to complement Ruff
                 "gopls",
             },
@@ -163,8 +163,8 @@ return {
                 end,
 
                 -- python (ruff + basedpyright)
-                ["ruff_lsp"] = function()
-                    lspconfig.ruff_lsp.setup({
+                ["ruff"] = function()
+                    lspconfig.ruff.setup({
                         capabilities = capabilities,
                         init_options = {
                             settings = {

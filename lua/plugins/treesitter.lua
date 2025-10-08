@@ -90,10 +90,6 @@ return {
         config = function(_, opts)
             require("nvim-treesitter.configs").setup(opts)
 
-            -- Treesitter folding (optional but nice)
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-
             -- Custom parser: templ
             local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
             parser_config.templ = {
