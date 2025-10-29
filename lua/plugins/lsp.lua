@@ -1,12 +1,6 @@
 local root_files = {
-  '.luarc.json',
-  '.luarc.jsonc',
-  '.luacheckrc',
-  '.stylua.toml',
-  'stylua.toml',
-  'selene.toml',
-  'selene.yml',
-  '.git',
+    '.luarc.json', '.luarc.jsonc', '.luacheckrc',
+    '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git',
 }
 
 return {
@@ -15,96 +9,273 @@ return {
         "stevearc/conform.nvim",
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
+        "hrsh7th/nvim-cmp",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
-        "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        -- recommended / optional:
+        "folke/trouble.nvim", -- you mapped keys to it
+        -- "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
-
     config = function()
         require("conform").setup({
             formatters_by_ft = {
-            }
+                lua    = { "stylua" },
+                python = { "ruff_format" }, -- fast; pair with ruff_lsp for linting
+                rust   = { "rustfmt" },
+                go     = { "gofmt", "goimports" },
+                json   = { "jq" },
+                yaml   = { "yamlfmt" },
+            },
+            format_on_save = function(bufnr)
+                -- Disable for very large files
+                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                if ok and stats and stats.size > 512 * 1024 then return nil end
+                return { timeout_ms = 800, lsp_fallback = true }
+            end,
         })
-        local cmp = require('cmp')
+
+        -- ── Completion (nvim-cmp) polish ──────────────────────────────────────────
+        local cmp = require("cmp")
         local cmp_lsp = require("cmp_nvim_lsp")
+        local luasnip = require("luasnip")
 
         local capabilities = vim.tbl_deep_extend(
             "force",
-            {},
             vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities())
+            cmp_lsp.default_capabilities(),
+            { textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } } }
+        )
 
         require("fidget").setup({})
         require("mason").setup()
+
+        -- ── Uniform rounded borders for LSP floats ────────────────────────────────
+        local _border = "rounded"
+        require("lspconfig.ui.windows").default_options.border = _border
+        vim.lsp.handlers["textDocument/hover"] =
+            vim.lsp.with(vim.lsp.handlers.hover, { border = _border })
+        vim.lsp.handlers["textDocument/signatureHelp"] =
+            vim.lsp.with(vim.lsp.handlers.signature_help, { border = _border })
+
+        -- ── Diagnostics look & feel ───────────────────────────────────────────────
+        vim.diagnostic.config({
+            virtual_text = { spacing = 2, prefix = "●" },
+            float = { border = _border, source = "always" },
+            severity_sort = true,
+        })
+
+        -- ── cmp setup ─────────────────────────────────────────────────────────────
+        cmp.setup({
+            snippet = {
+                expand = function(args) luasnip.lsp_expand(args.body) end,
+            },
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
+            mapping = cmp.mapping.preset.insert({
+                ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                ["<C-Space>"] = cmp.mapping.complete(),
+                ["<CR>"] = cmp.mapping.confirm({ select = false }),
+            }),
+            sources = cmp.config.sources({
+                { name = "nvim_lsp" },
+                { name = "luasnip" },
+            }, {
+                { name = "path" },
+                { name = "buffer" },
+            }),
+            sorting = {
+                priority_weight = 2,
+                comparators = {
+                    cmp.config.compare.offset,
+                    cmp.config.compare.exact,
+                    cmp.config.compare.score,
+                    cmp.config.compare.recently_used,
+                    cmp.config.compare.locality,
+                    cmp.config.compare.kind,
+                    cmp.config.compare.length,
+                    cmp.config.compare.order,
+                },
+            },
+        })
+
+        -- cmdline completion
+        cmp.setup.cmdline("/", {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = { { name = "buffer" } },
+        })
+        cmp.setup.cmdline(":", {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
+        })
+
+        -- ── Mason LSP setup with per-server opts ──────────────────────────────────
+        local lspconfig = require("lspconfig")
+        local util = require("lspconfig.util")
+
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
-                "ruff"
+                "ruff",
+                "basedpyright", -- type checker to complement Ruff
+                "gopls",
             },
             handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
-                end,
-                ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
+                -- default
+                function(server_name)
+                    lspconfig[server_name].setup({
                         capabilities = capabilities,
+                        root_dir = util.root_pattern(unpack(root_files)) or util.find_git_ancestor,
+                    })
+                end,
+
+                -- lua
+                ["lua_ls"] = function()
+                    lspconfig.lua_ls.setup({
+                        capabilities = capabilities,
+                        root_dir = util.root_pattern(unpack(root_files)),
                         settings = {
                             Lua = {
-                                format = {
-                                    enable = true,
-                                    defaultConfig = {
-                                        indent_style = "space",
-                                        indent_size = "2",
-                                    }
+                                completion = { callSnippet = "Replace" },
+                                diagnostics = { globals = { "vim" } },
+                                format = { enable = false }, -- Conform handles formatting
+                                workspace = {
+                                    checkThirdParty = false,
+                                    library = {
+                                        vim.env.VIMRUNTIME,
+                                        "${3rd}/luv/library",
+                                        "${3rd}/busted/library",
+                                    },
                                 },
-                            }
-                        }
-                    }
+                                telemetry = { enable = false },
+                            },
+                        },
+                    })
                 end,
-            }
-        })
 
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+                -- python (ruff + basedpyright)
+                ["ruff"] = function()
+                    lspconfig.ruff.setup({
+                        capabilities = capabilities,
+                        init_options = {
+                            settings = {
+                                args = {}, -- customize if you use pyproject.toml
+                            },
+                        },
+                    })
+                end,
+                ["basedpyright"] = function()
+                    lspconfig.basedpyright.setup({
+                        capabilities = capabilities,
+                        settings = {
+                            basedpyright = {
+                                analysis = {
+                                    useLibraryCodeForTypes = true,
+                                    typeCheckingMode = 'basic',
+                                    diagnosticMode = 'workspace',
+                                    autoSearchPath = true,
+                                    inlayHints = {
+                                        callArgumentNames = true,
+                                    },
+                                    extraPaths = {
+                                        '...',
+                                        '...',
+                                    },
+                                },
+                                python = {
+                                    venvPath = './.venv',
+                                    venv = '.venv',
+                                },
+                                diagnosticSeverityOverrides = {
+                                    reportUnknownVariableType  = "none",
+                                    reportUnknownMemberType    = "none",
+                                    reportUnknownArgumentType  = "none",
+                                    reportUnknownParameterType = "none",
+                                    reportMissingTypeStubs     = "none",
+                                    reportPrivateImportUsage   = "none",
+                                }
+                            },
+                        },
+                    })
+                end,
 
-        cmp.setup({
-            snippet = {
-                expand = function(args)
-                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                -- go
+                ["gopls"] = function()
+                    lspconfig.gopls.setup({
+                        capabilities = capabilities,
+                        settings = {
+                            gopls = {
+                                usePlaceholders = true,
+                                analyses = { unusedparams = true, nilness = true, shadow = true },
+                            },
+                        },
+                    })
+                end,
+
+                -- rust
+                ["rust_analyzer"] = function()
+                    lspconfig.rust_analyzer.setup({
+                        capabilities = capabilities,
+                        settings = {
+                            ["rust-analyzer"] = {
+                                cargo = { allFeatures = true },
+                                check = { command = "clippy" },
+                                inlayHints = { lifetimeElisionHints = { enable = true, useParameterNames = true } },
+                            },
+                        },
+                    })
                 end,
             },
-            mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
-            }),
-            sources = cmp.config.sources({
-                { name = 'nvim_lsp' },
-                { name = 'luasnip' }, -- For luasnip users.
-            }, {
-                { name = 'buffer' },
-            })
         })
 
-        vim.diagnostic.config({
-            -- update_in_insert = true,
-            float = {
-                focusable = false,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
-            },
+        -- ── Inlay hints auto-enable & toggle ──────────────────────────────────────
+        local ih_enabled = true
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+                local client = vim.lsp.get_client_by_id(args.data.client_id)
+                if client and client.server_capabilities.inlayHintProvider then
+                    pcall(vim.lsp.inlay_hint, args.buf, ih_enabled)
+                end
+            end,
         })
-    end
+        vim.keymap.set("n", "<leader>uh", function()
+            ih_enabled = not ih_enabled
+            local buf = vim.api.nvim_get_current_buf()
+            pcall(vim.lsp.inlay_hint, buf, ih_enabled)
+        end, { desc = "Toggle inlay hints" })
+
+        -- ── LSP keymaps (plus a few extras) ───────────────────────────────────────
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(event)
+                local opts = { buffer = event.buf, silent = true, noremap = true, desc = "" }
+
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                -- If Trouble installed:
+                vim.keymap.set("n", "gr", require("trouble").toggle, opts)
+                vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end, opts)
+                -- Otherwise, use:
+                -- vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+
+                vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+                vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, opts)
+                vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+                vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+                vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                vim.keymap.set("n", "<leader>f", function() require("conform").format({ async = false }) end,
+                    { buffer = event.buf, desc = "Format buffer" })
+            end
+        })
+    end,
 }
