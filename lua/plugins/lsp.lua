@@ -178,8 +178,31 @@ return {
                         capabilities = capabilities,
                         settings = {
                             basedpyright = {
-                                disableOrganizeImports = true, -- let Ruff handle it
-                                analysis = { typeCheckingMode = "standard" },
+                                analysis = {
+                                    useLibraryCodeForTypes = true,
+                                    typeCheckingMode = 'basic',
+                                    diagnosticMode = 'workspace',
+                                    autoSearchPath = true,
+                                    inlayHints = {
+                                        callArgumentNames = true,
+                                    },
+                                    extraPaths = {
+                                        '...',
+                                        '...',
+                                    },
+                                },
+                                python = {
+                                    venvPath = './.venv',
+                                    venv = '.venv',
+                                },
+                                diagnosticSeverityOverrides = {
+                                    reportUnknownVariableType  = "none",
+                                    reportUnknownMemberType    = "none",
+                                    reportUnknownArgumentType  = "none",
+                                    reportUnknownParameterType = "none",
+                                    reportMissingTypeStubs     = "none",
+                                    reportPrivateImportUsage   = "none",
+                                }
                             },
                         },
                     })
