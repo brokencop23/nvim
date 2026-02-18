@@ -1,32 +1,57 @@
 return {
     "nvim-telescope/telescope.nvim",
-
     tag = "0.1.5",
-
     dependencies = {
-        "nvim-lua/plenary.nvim"
+        "nvim-lua/plenary.nvim",
+        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
-
-    config = function()
-        require('telescope').setup({})
-
-        local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-        vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-        vim.keymap.set('n', '<leader>pws', function()
+    keys = {
+        { "<leader>ff", function() require("telescope.builtin").find_files() end, desc = "Find Files" },
+        { "<leader>fg", function() require("telescope.builtin").live_grep() end, desc = "Live Grep" },
+        { "<leader>fb", function() require("telescope.builtin").buffers() end, desc = "Find Buffers" },
+        { "<leader>fh", function() require("telescope.builtin").help_tags() end, desc = "Help Tags" },
+        { "<leader>fm", function() require("telescope.builtin").harpoon_marks() end, desc = "Harpoon Marks" },
+        { "<C-p>", function() require("telescope.builtin").git_files() end, desc = "Find Git Files" },
+        { "<leader>pws", function()
             local word = vim.fn.expand("<cword>")
-            builtin.grep_string({ search = word })
-        end)
-        vim.keymap.set('n', '<leader>pWs', function()
+            require("telescope.builtin").grep_string({ search = word })
+        end, desc = "Grep Word" },
+        { "<leader>pWs", function()
             local word = vim.fn.expand("<cWORD>")
-            builtin.grep_string({ search = word })
-        end)
-        vim.keymap.set('n', '<leader>ps', function()
-            builtin.grep_string({ search = vim.fn.input("Grep > ") })
-        end)
-        vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
+            require("telescope.builtin").grep_string({ search = word })
+        end, desc = "Grep WORD" },
+        { "<leader>ps", function()
+            require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") })
+        end, desc = "Grep String" },
+        { "<leader>vh", function() require("telescope.builtin").help_tags() end, desc = "Help Tags" },
+        { "<leader>ds", function() require("telescope.builtin").lsp_document_symbols() end, desc = "Document Symbols" },
+        { "<leader>ws", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbols" },
+    },
+    config = function()
+        require("telescope").setup({
+            defaults = {
+                file_ignore_patterns = { "node_modules", ".git/", "%.lock" },
+                mappings = {
+                    i = {
+                        ["<C-j>"] = require("telescope.actions").move_selection_next,
+                        ["<C-k>"] = require("telescope.actions").move_selection_previous,
+                    },
+                },
+                layout_strategy = "horizontal",
+                layout_config = {
+                    horizontal = {
+                        preview_width = 0.55,
+                    },
+                },
+            },
+            pickers = {
+                find_files = {
+                    hidden = true,
+                },
+            },
+        })
 
-        vim.keymap.set("n", "<leader>ds", builtin.lsp_document_symbols, {})
-        vim.keymap.set("n", "<leader>ws", builtin.lsp_workspace_symbols, {})
+        -- Load fzf extension for better performance
+        pcall(require("telescope").load_extension, "fzf")
     end
 }
