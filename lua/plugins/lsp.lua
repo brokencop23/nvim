@@ -68,7 +68,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "ruff",
-                "basedpyright", -- type checker to complement Ruff
+                "pyright", -- type checker to complement Ruff
                 "gopls",
             },
             handlers = {
@@ -115,12 +115,12 @@ return {
                         }
                     })
                 end,
-                ["basedpyright"] = function()
-                    lspconfig.basedpyright.setup({
+                ["pyright"] = function()
+                    lspconfig.pyright.setup({
                         capabilities = capabilities,
                         root_dir = util.root_pattern('pyproject.toml', '.git'),
                         settings = {
-                            basedpyright = {
+                            pyright = {
                                 analysis = {
                                     useLibraryCodeForTypes = true,
                                     typeCheckingMode = 'basic',
