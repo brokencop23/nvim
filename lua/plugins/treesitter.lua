@@ -6,7 +6,7 @@ return {
         opts = {
             ensure_installed = {
                 "vimdoc", "query",
-                "c", "lua", "rust", "go", "bash", "python",
+                "lua", "rust", "bash", "python",
                 "dockerfile", "json", "yaml",
                 "markdown", "markdown_inline",
                 "templ", -- custom below
@@ -17,16 +17,18 @@ return {
             highlight = {
                 enable = true,
                 -- Prefer native markdown parsers over regex fallback:
-                additional_vim_regex_highlighting = {},
+                additional_vim_regex_highlighting = { "markdown" },
                 disable = function(lang, buf)
                     -- Example: keep html enabled unless you really need it off
                     -- if lang == "html" then return true end
-
+                    if lang == "markdown" or lang == "markdown_inline" then
+                        return true
+                    end
                     local ok_name, name = pcall(vim.api.nvim_buf_get_name, buf)
                     if not ok_name or name == "" then return false end
 
                     local max = 100 * 1024 -- 100KB
-                    local ok, stat = pcall(vim.loop.fs_stat, name)
+                    local ok, stat = pcall(vim.uv.fs_stat, name)
                     if ok and stat and stat.size > max then
                         if not vim.b[buf].__ts_disabled_notified then
                             vim.b[buf].__ts_disabled_notified = true
@@ -82,31 +84,18 @@ return {
                 },
                 swap = {
                     enable = true,
-                    swap_next = { ["<leader>a"] = "@parameter.inner" },
-                    swap_previous = { ["<leader>A"] = "@parameter.inner" },
+                    swap_next = { ["<leader>sp"] = "@parameter.inner" },
+                    swap_previous = { ["<leader>sP"] = "@parameter.inner" },
                 },
             },
         },
         config = function(_, opts)
             require("nvim-treesitter.configs").setup(opts)
 
-            -- Custom parser: templ
-            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-            parser_config.templ = {
-                install_info = {
-                    url = "https://github.com/vrischmann/tree-sitter-templ.git",
-                    files = { "src/parser.c", "src/scanner.c" },
-                    branch = "master",
-                },
-                filetype = "templ",
-            }
-
             -- Recognize .templ files
             vim.filetype.add({
                 extension = { templ = "templ" },
             })
-
-            -- Map filetype -> treesitter language (redundant but explicit)
             vim.treesitter.language.register("templ", "templ")
         end,
         dependencies = {

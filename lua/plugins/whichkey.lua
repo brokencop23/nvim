@@ -13,7 +13,6 @@ return {
             { "<leader>f", group = "Find (Telescope)" },
             { "<leader>g", group = "Git" },
             { "<leader>d", group = "Debug" },
-            { "<leader>h", group = "Harpoon" },
             { "<leader>x", group = "Trouble" },
             { "<leader>u", group = "UI Toggles" },
             { "<leader>c", group = "Code" },

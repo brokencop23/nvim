@@ -7,7 +7,7 @@ return {
         "MunifTanjim/nui.nvim"
     },
     keys = {
-        { "<leader>q", function() require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() }) end, desc = "Explorer (NeoTree)" },
+        { "<leader>e", function() require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() }) end, desc = "Explorer (NeoTree)" },
     },
     opts = {
         close_if_last_window = true,

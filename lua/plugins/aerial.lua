@@ -6,7 +6,7 @@ return {
     },
     cmd = { "AerialToggle", "AerialOpen", "AerialClose" },
     keys = {
-        { "<leader>a", ":AerialToggle<CR>", desc = "Aerial (Code Outline)" },
+        { "<leader>aa", ":AerialToggle<CR>", desc = "Aerial (Code Outline)" },
     },
     opts = {
         on_attach = function(bufnr)

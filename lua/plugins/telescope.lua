@@ -1,6 +1,6 @@
 return {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.5",
+    branch = "0.1.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -10,7 +10,6 @@ return {
         { "<leader>fg", function() require("telescope.builtin").live_grep() end, desc = "Live Grep" },
         { "<leader>fb", function() require("telescope.builtin").buffers() end, desc = "Find Buffers" },
         { "<leader>fh", function() require("telescope.builtin").help_tags() end, desc = "Help Tags" },
-        { "<leader>fm", function() require("telescope.builtin").harpoon_marks() end, desc = "Harpoon Marks" },
         { "<C-p>", function() require("telescope.builtin").git_files() end, desc = "Find Git Files" },
         { "<leader>pws", function()
             local word = vim.fn.expand("<cword>")

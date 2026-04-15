@@ -50,9 +50,3 @@ keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true, desc = 'Scr
 -- Keep search results centered
 keymap.set('n', 'n', 'nzzzv', { noremap = true, silent = true, desc = 'Next search result' })
 keymap.set('n', 'N', 'Nzzzv', { noremap = true, silent = true, desc = 'Previous search result' })
-
--- Keymaps for harpoon
-keymap.set('n', '<leader>hh', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', {noremap=true, silent=true, desc = 'Harpoon menu'})
-keymap.set('n', '<leader>hm', ':lua require("harpoon.mark").add_file()<CR>', {noremap=true, silent=true, desc = 'Mark file'})
-keymap.set('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', {noremap=true, silent=true, desc = 'Next mark'})
-keymap.set('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', {noremap=true, silent=true, desc = 'Previous mark'})
