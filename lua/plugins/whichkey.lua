@@ -19,6 +19,7 @@ return {
             { "<leader>p", group = "Project" },
             { "<leader>b", group = "Buffer" },
             { "<leader>q", group = "Quit" },
+            { "<leader>r", group = "Refactor" },
         })
     end,
     keys = {

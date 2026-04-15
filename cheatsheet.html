@@ -209,6 +209,77 @@
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>Y</kbd></td><td>Yank line to system clipboard</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>c</kbd><kbd>c</kbd></td><td>Toggle comment (line)</td></tr>
       <tr><td><span class="mode mode-v">V</span> <kbd>g</kbd><kbd>c</kbd></td><td>Toggle comment (selection)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>b</kbd><kbd>c</kbd></td><td>Toggle block comment (line)</td></tr>
+      <tr><td><span class="mode mode-v">V</span> <kbd>g</kbd><kbd>b</kbd></td><td>Toggle block comment (selection)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>c</kbd><kbd>O</kbd></td><td>Add comment above</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>c</kbd><kbd>o</kbd></td><td>Add comment below</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>c</kbd><kbd>A</kbd></td><td>Add comment at end of line</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── SURROUND ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--teal)"></span>Surround</h2>
+    <table>
+      <tr><td><span class="mode mode-n">N</span> <kbd>y</kbd><kbd>s</kbd><kbd>{motion}</kbd><kbd>{char}</kbd></td><td>Add surround</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>d</kbd><kbd>s</kbd><kbd>{char}</kbd></td><td>Delete surround</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>c</kbd><kbd>s</kbd><kbd>{old}</kbd><kbd>{new}</kbd></td><td>Change surround</td></tr>
+      <tr><td><span class="mode mode-v">V</span> <kbd>S</kbd><kbd>{char}</kbd></td><td>Surround selection</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">EXAMPLES</td></tr>
+      <tr><td><kbd>y</kbd><kbd>s</kbd><kbd>i</kbd><kbd>w</kbd><kbd>"</kbd></td><td>Surround word with quotes</td></tr>
+      <tr><td><kbd>d</kbd><kbd>s</kbd><kbd>"</kbd></td><td>Delete surrounding quotes</td></tr>
+      <tr><td><kbd>c</kbd><kbd>s</kbd><kbd>"</kbd><kbd>(</kbd></td><td>Change " to ( )</td></tr>
+      <tr><td><kbd>y</kbd><kbd>s</kbd><kbd>s</kbd><kbd>}</kbd></td><td>Surround entire line with { }</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── FLASH ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--magenta)"></span>Flash (Jump &amp; Select)</h2>
+    <table>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>s</kbd></td><td>Flash jump (type to search, label to jump)</td></tr>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>S</kbd></td><td>Flash treesitter (select node)</td></tr>
+      <tr><td><span class="mode mode-c">C</span> <kbd>Ctrl</kbd>+<kbd>s</kbd></td><td>Toggle flash in search mode</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">OPERATOR-PENDING</td></tr>
+      <tr><td><kbd>r</kbd></td><td>Remote flash (operate on distant text)</td></tr>
+      <tr><td><kbd>R</kbd></td><td>Treesitter search (structural select)</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">COMMANDS</td></tr>
+      <tr><td><kbd>:Flash</kbd></td><td>Start flash jump</td></tr>
+      <tr><td><kbd>:FlashTreesitter</kbd></td><td>Start flash treesitter select</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── REFACTORING ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--orange)"></span>Refactoring</h2>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">VISUAL MODE (select code first)</td></tr>
+      <tr><td><span class="mode mode-x">X</span> <kbd>Space</kbd><kbd>r</kbd><kbd>e</kbd></td><td>Extract function</td></tr>
+      <tr><td><span class="mode mode-x">X</span> <kbd>Space</kbd><kbd>r</kbd><kbd>f</kbd></td><td>Extract function to file</td></tr>
+      <tr><td><span class="mode mode-x">X</span> <kbd>Space</kbd><kbd>r</kbd><kbd>v</kbd></td><td>Extract variable</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">NORMAL MODE</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>r</kbd><kbd>i</kbd></td><td>Inline variable</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>r</kbd><kbd>I</kbd></td><td>Inline function</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>r</kbd><kbd>b</kbd></td><td>Extract block</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>r</kbd><kbd>B</kbd></td><td>Extract block to file</td></tr>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>Space</kbd><kbd>r</kbd><kbd>r</kbd></td><td>Select refactor (menu)</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">COMMANDS</td></tr>
+      <tr><td><kbd>:Refactor</kbd> <em>operation</em></td><td>Run refactor by name</td></tr>
     </table>
   </div>
 
@@ -408,6 +479,7 @@
       <tr><td><kbd>Space</kbd><kbd>c</kbd></td><td>Code</td></tr>
       <tr><td><kbd>Space</kbd><kbd>p</kbd></td><td>Project</td></tr>
       <tr><td><kbd>Space</kbd><kbd>b</kbd></td><td>Buffer</td></tr>
+      <tr><td><kbd>Space</kbd><kbd>r</kbd></td><td>Refactor</td></tr>
       <tr><td><kbd>Space</kbd><kbd>t</kbd></td><td>Testing</td></tr>
       <tr><td><kbd>Space</kbd><kbd>q</kbd></td><td>Quit</td></tr>
     </table>
