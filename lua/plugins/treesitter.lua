@@ -1,6 +1,8 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "master",
+        version = false,
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
         opts = {
@@ -99,8 +101,10 @@ return {
             vim.treesitter.language.register("templ", "templ")
         end,
         dependencies = {
-            -- Powerful motions/selections based on TS nodes
-            "nvim-treesitter/nvim-treesitter-textobjects",
+             {
+                "nvim-treesitter/nvim-treesitter-textobjects",
+                branch = "master",
+            },
         },
     },
 
