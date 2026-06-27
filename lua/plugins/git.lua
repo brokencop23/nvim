@@ -1,7 +1,6 @@
 return {
-    -- core git UX
+    -- core git UX (gitsigns lives in its own file)
     { "tpope/vim-fugitive" },
-    { "lewis6991/gitsigns.nvim", opts = { current_line_blame = true } },
     -- optional: git TUI inside nvim (super handy)
     { "kdheepak/lazygit.nvim" },
 }

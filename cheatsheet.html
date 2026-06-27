@@ -240,7 +240,7 @@
   <div class="card">
     <h2><span class="dot" style="background:var(--magenta)"></span>Flash (Jump &amp; Select)</h2>
     <table>
-      <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>s</kbd></td><td>Flash jump (type to search, label to jump)</td></tr>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>Space</kbd><kbd>s</kbd></td><td>Flash jump (type to search, label to jump)</td></tr>
       <tr><td><span class="mode mode-n">N</span><span class="mode mode-x">X</span> <kbd>S</kbd></td><td>Flash treesitter (select node)</td></tr>
       <tr><td><span class="mode mode-c">C</span> <kbd>Ctrl</kbd>+<kbd>s</kbd></td><td>Toggle flash in search mode</td></tr>
     </table>
@@ -364,8 +364,8 @@
       <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">MOVE &amp; SWAP</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>]</kbd><kbd>m</kbd> / <kbd>[</kbd><kbd>m</kbd></td><td>Next/prev function</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>]</kbd><kbd>c</kbd> / <kbd>[</kbd><kbd>c</kbd></td><td>Next/prev class</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>s</kbd><kbd>p</kbd></td><td>Swap parameter forward</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>s</kbd><kbd>P</kbd></td><td>Swap parameter backward</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>c</kbd><kbd>s</kbd></td><td>Swap parameter forward</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>c</kbd><kbd>S</kbd></td><td>Swap parameter backward</td></tr>
     </table>
   </div>
 
@@ -373,9 +373,10 @@
   <div class="card">
     <h2><span class="dot" style="background:var(--red)"></span>Trouble (Diagnostics)</h2>
     <table>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>x</kbd></td><td>Toggle Trouble</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>x</kbd></td><td>Toggle Trouble (diagnostics)</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>w</kbd></td><td>Workspace diagnostics</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>d</kbd></td><td>Document diagnostics</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>d</kbd></td><td>Document diagnostics (current buffer)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>s</kbd></td><td>Document symbols</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>l</kbd></td><td>Location list</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>x</kbd><kbd>q</kbd></td><td>Quickfix list</td></tr>
     </table>
@@ -398,8 +399,27 @@
     </table>
     <div class="sep"></div>
     <table>
-      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">GITSIGNS (inline blame enabled)</td></tr>
-      <tr><td><kbd>]c</kbd> / <kbd>[c</kbd></td><td>Next/prev hunk</td></tr>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">GITSIGNS — NAVIGATION</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>]</kbd><kbd>h</kbd> / <kbd>[</kbd><kbd>h</kbd></td><td>Next/prev hunk</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">GITSIGNS — HUNKS</td></tr>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-v">V</span> <kbd>Space</kbd><kbd>g</kbd><kbd>s</kbd></td><td>Stage hunk</td></tr>
+      <tr><td><span class="mode mode-n">N</span><span class="mode mode-v">V</span> <kbd>Space</kbd><kbd>g</kbd><kbd>r</kbd></td><td>Reset hunk</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>S</kbd></td><td>Stage buffer</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>R</kbd></td><td>Reset buffer</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>u</kbd></td><td>Undo stage hunk</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>p</kbd></td><td>Preview hunk</td></tr>
+      <tr><td><kbd>i</kbd><kbd>h</kbd></td><td>Select hunk (text object)</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">GITSIGNS — BLAME &amp; DIFF</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>b</kbd></td><td>Blame line (full)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>t</kbd><kbd>b</kbd></td><td>Toggle inline blame</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>d</kbd></td><td>Diff vs index</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>g</kbd><kbd>D</kbd></td><td>Diff vs HEAD~</td></tr>
     </table>
   </div>
 
@@ -419,13 +439,14 @@
   <div class="card">
     <h2><span class="dot" style="background:var(--teal)"></span>Testing (Neotest)</h2>
     <table>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>r</kbd></td><td>Run nearest test</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>t</kbd></td><td>Run nearest test</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>r</kbd></td><td>Run last test</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>s</kbd></td><td>Run test suite</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>a</kbd></td><td>Run all tests (cwd)</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>d</kbd></td><td>Debug nearest test</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>o</kbd></td><td>Open test output</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>v</kbd></td><td>Toggle test summary</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>t</kbd></td><td>Refresh summary</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>t</kbd><kbd>n</kbd></td><td>Refresh summary</td></tr>
     </table>
   </div>
 
@@ -480,8 +501,18 @@
       <tr><td><kbd>Space</kbd><kbd>p</kbd></td><td>Project</td></tr>
       <tr><td><kbd>Space</kbd><kbd>b</kbd></td><td>Buffer</td></tr>
       <tr><td><kbd>Space</kbd><kbd>r</kbd></td><td>Refactor</td></tr>
-      <tr><td><kbd>Space</kbd><kbd>t</kbd></td><td>Testing</td></tr>
+      <tr><td><kbd>Space</kbd><kbd>t</kbd></td><td>Test</td></tr>
+      <tr><td><kbd>Space</kbd><kbd>n</kbd></td><td>Neogen (doc generation)</td></tr>
       <tr><td><kbd>Space</kbd><kbd>q</kbd></td><td>Quit</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── NEOGEN ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--cyan)"></span>Neogen (Doc Generation)</h2>
+    <table>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>n</kbd><kbd>f</kbd></td><td>Generate function doc</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>n</kbd><kbd>t</kbd></td><td>Generate type doc</td></tr>
     </table>
   </div>
 

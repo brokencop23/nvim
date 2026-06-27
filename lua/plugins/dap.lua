@@ -54,7 +54,7 @@ return {
                 },
                 dependencies = {
                     "mfussenegger/nvim-dap",
-                    "mason-org/mason.nvim",
+                    "williamboman/mason.nvim",
                 },
             },
             {

@@ -5,7 +5,6 @@ return {
         "nvim-treesitter/nvim-treesitter",
         "lewis6991/async.nvim",
     },
-    lazy = false,
     opts = {},
     keys = {
         { "<leader>re", mode = "x",          function() require("refactoring").refactor("Extract Function") end,         desc = "Extract function" },

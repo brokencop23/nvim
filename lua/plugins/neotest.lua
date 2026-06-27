@@ -26,43 +26,37 @@ return {
             })
 
             vim.keymap.set("n", "<leader>tt", function()
-                require("neotest").summary.refresh()
-            end, { desc = "Debug: Refresh summary" })
+                require("neotest").run.run()
+            end, { desc = "Test: Run nearest" })
 
             vim.keymap.set("n", "<leader>tr", function()
-                require("neotest").run.run({
-                    suite = false,
-                    testify = true,
-                })
-            end, { desc = "Debug: Running Nearest Test" })
+                require("neotest").run.run_last()
+            end, { desc = "Test: Run last" })
+
+            vim.keymap.set("n", "<leader>tn", function()
+                require("neotest").summary.refresh()
+            end, { desc = "Test: Refresh summary" })
 
             vim.keymap.set("n", "<leader>tv", function()
                 require("neotest").summary.toggle()
-            end, { desc = "Debug: Summary Toggle" })
+            end, { desc = "Test: Toggle summary" })
 
             vim.keymap.set("n", "<leader>ts", function()
-                require("neotest").run.run({
-                    suite = true,
-                    testify = true,
-                })
-            end, { desc = "Debug: Running Test Suite" })
+                require("neotest").run.run({ suite = true })
+            end, { desc = "Test: Run suite" })
 
             vim.keymap.set("n", "<leader>td", function()
                 require("dap-python")
-                require("neotest").run.run({
-                    suite = false,
-                    --testify = true,
-                    strategy = "dap",
-                })
-            end, { desc = "Debug: Debug Nearest Test" })
+                require("neotest").run.run({ strategy = "dap" })
+            end, { desc = "Test: Debug nearest" })
 
             vim.keymap.set("n", "<leader>to", function()
                 require("neotest").output.open()
-            end, { desc = "Debug: Open test output" })
+            end, { desc = "Test: Open output" })
 
             vim.keymap.set("n", "<leader>ta", function()
                 require("neotest").run.run(vim.fn.getcwd())
-            end, { desc = "Debug: Open test output" })
+            end, { desc = "Test: Run all in cwd" })
 
         end,
     },

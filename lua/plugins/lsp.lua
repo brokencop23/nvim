@@ -28,7 +28,7 @@ return {
                 -- Disable for very large files
                 local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
                 if ok and stats and stats.size > 512 * 1024 then return nil end
-                return { timeout_ms = 800, lsp_fallback = true }
+                return { timeout_ms = 800, lsp_format = "fallback" }
             end,
         })
 
@@ -90,7 +90,7 @@ return {
                 function(server_name)
                     lspconfig[server_name].setup({
                         capabilities = capabilities,
-                        root_dir = util.root_pattern(unpack(root_files)) or util.find_git_ancestor,
+                        root_dir = util.root_pattern(unpack(root_files)),
                     })
                 end,
 
@@ -202,7 +202,9 @@ return {
                 map("gi", vim.lsp.buf.implementation, "Go to implementation")
                 map("<leader>h", function() vim.lsp.buf.hover({ border = _border }) end, "Hover documentation")
                 map("<leader>H", function()
-                    local params = vim.lsp.util.make_position_params()
+                    local client = vim.lsp.get_clients({ bufnr = event.buf })[1]
+                    local enc = client and client.offset_encoding or "utf-16"
+                    local params = vim.lsp.util.make_position_params(0, enc)
                     vim.lsp.buf_request(event.buf, "textDocument/hover", params, function(err, result)
                         if err or not result or not result.contents then return end
                         local lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
@@ -217,8 +219,8 @@ return {
                     end)
                 end, "Hover documentation (split)")
                 map("<leader>ce", vim.diagnostic.open_float, "Line diagnostics")
-                map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-                map("]d", vim.diagnostic.goto_next, "Next diagnostic")
+                map("[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Previous diagnostic")
+                map("]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Next diagnostic")
                 map("<leader>ca", vim.lsp.buf.code_action, "Code action")
                 map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
                 map("<leader>cf", function() require("conform").format({ async = false }) end, "Format buffer")

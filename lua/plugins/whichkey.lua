@@ -20,6 +20,8 @@ return {
             { "<leader>b", group = "Buffer" },
             { "<leader>q", group = "Quit" },
             { "<leader>r", group = "Refactor" },
+            { "<leader>t", group = "Test" },
+            { "<leader>n", group = "Neogen" },
         })
     end,
     keys = {
