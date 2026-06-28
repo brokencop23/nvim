@@ -22,6 +22,8 @@ return {
             { "<leader>r", group = "Refactor" },
             { "<leader>t", group = "Test" },
             { "<leader>n", group = "Neogen" },
+            { "<leader>R", group = "Rust (rustaceanvim)" },
+            { "<leader>C", group = "Crates" },
         })
     end,
     keys = {

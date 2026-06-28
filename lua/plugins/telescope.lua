@@ -24,7 +24,7 @@ return {
         end, desc = "Grep String" },
         { "<leader>vh", function() require("telescope.builtin").help_tags() end, desc = "Help Tags" },
         { "<leader>ds", function() require("telescope.builtin").lsp_document_symbols() end, desc = "Document Symbols" },
-        { "<leader>ws", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbols" },
+        { "<leader>fS", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbols" },
     },
     config = function()
         require("telescope").setup({

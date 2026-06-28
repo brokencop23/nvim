@@ -11,9 +11,8 @@ return {
         "williamboman/mason-lspconfig.nvim",
 
         "j-hui/fidget.nvim",
-        -- recommended / optional:
-        "folke/trouble.nvim", -- you mapped keys to it
-        -- "WhoIsSethDaniel/mason-tool-installer.nvim",
+        "folke/trouble.nvim",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
         require("conform").setup({
@@ -42,6 +41,18 @@ return {
 
         require("fidget").setup({})
         require("mason").setup()
+
+        -- Non-LSP tools (formatters, debug adapters) installed by mason
+        require("mason-tool-installer").setup({
+            ensure_installed = {
+                "stylua",
+                "yamlfmt",
+                "codelldb", -- for rust debugging via rustaceanvim
+                "debugpy",  -- for python debugging
+            },
+            auto_update = false,
+            run_on_start = true,
+        })
 
         -- ── Uniform rounded borders for LSP floats ────────────────────────────────
         local _border = "rounded"
@@ -74,103 +85,71 @@ return {
             severity_sort = true,
         })
 
-        -- ── Mason LSP setup with per-server opts ──────────────────────────────────
-        local lspconfig = require("lspconfig")
-        local util = require("lspconfig.util")
+        -- ── Mason LSP setup (mason-lspconfig v2 + nvim 0.11+ vim.lsp.config) ─────
+        -- Global defaults applied to every server via vim.lsp.config('*', ...)
+        vim.lsp.config("*", {
+            capabilities = capabilities,
+            root_markers = root_files,
+        })
 
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "lua_ls",
-                "rust_analyzer",
                 "ruff",
                 "pyright", -- type checker to complement Ruff
             },
-            handlers = {
-                -- default
-                function(server_name)
-                    lspconfig[server_name].setup({
-                        capabilities = capabilities,
-                        root_dir = util.root_pattern(unpack(root_files)),
-                    })
-                end,
-
-                -- lua
-                ["lua_ls"] = function()
-                    lspconfig.lua_ls.setup({
-                        capabilities = capabilities,
-                        root_dir = util.root_pattern(unpack(root_files)),
-                        settings = {
-                            Lua = {
-                                completion = { callSnippet = "Replace" },
-                                diagnostics = { globals = { "vim" } },
-                                format = { enable = false }, -- Conform handles formatting
-                                workspace = {
-                                    checkThirdParty = false,
-                                    library = {
-                                        vim.env.VIMRUNTIME,
-                                        "${3rd}/luv/library",
-                                        "${3rd}/busted/library",
-                                    },
-                                },
-                                telemetry = { enable = false },
-                            },
-                        },
-                    })
-                end,
-
-                -- python (ruff + basedpyright)
-                ["ruff"] = function()
-                    lspconfig.ruff.setup({
-                        capabilities = capabilities,
-                        init_options = {
-                            settings = {
-                                -- Add any specific ruff settings here
-                            }
-                        }
-                    })
-                end,
-                ["pyright"] = function()
-                    lspconfig.pyright.setup({
-                        capabilities = capabilities,
-                        root_dir = util.root_pattern('pyproject.toml', '.git'),
-                        settings = {
-                            python = {
-                                analysis = {
-                                    useLibraryCodeForTypes = true,
-                                    typeCheckingMode = 'basic',
-                                    diagnosticMode = 'workspace',
-                                    autoSearchPaths = true,
-                                    inlayHints = {
-                                        callArgumentNames = true,
-                                    },
-                                    diagnosticSeverityOverrides = {
-                                        reportUnknownMemberType = "information",
-                                        reportUnknownVariableType = "none",
-                                        reportUnknownArgumentType = "none",
-                                        reportMissingTypeStubs = "none",
-                                        reportPrivateImportUsage = "none",
-                                    },
-                                },
-                            },
-                        },
-                    })
-                end,
-
-                -- rust
-                ["rust_analyzer"] = function()
-                    lspconfig.rust_analyzer.setup({
-                        capabilities = capabilities,
-                        settings = {
-                            ["rust-analyzer"] = {
-                                cargo = { allFeatures = true },
-                                check = { command = "clippy" },
-                                inlayHints = { lifetimeElisionHints = { enable = true, useParameterNames = true } },
-                            },
-                        },
-                    })
-                end,
+            -- rust_analyzer is owned by rustaceanvim; prevent double-enable
+            automatic_enable = {
+                exclude = { "rust_analyzer" },
             },
         })
+
+        -- Per-server overrides (merged on top of mason-lspconfig defaults)
+        vim.lsp.config("lua_ls", {
+            settings = {
+                Lua = {
+                    completion = { callSnippet = "Replace" },
+                    diagnostics = { globals = { "vim" } },
+                    format = { enable = false }, -- Conform handles formatting
+                    workspace = {
+                        checkThirdParty = false,
+                        library = {
+                            vim.env.VIMRUNTIME,
+                            "${3rd}/luv/library",
+                            "${3rd}/busted/library",
+                        },
+                    },
+                    telemetry = { enable = false },
+                },
+            },
+        })
+
+        vim.lsp.config("pyright", {
+            root_markers = { "pyproject.toml", ".git" },
+            settings = {
+                python = {
+                    analysis = {
+                        useLibraryCodeForTypes = true,
+                        typeCheckingMode = "basic",
+                        diagnosticMode = "workspace",
+                        autoSearchPaths = true,
+                        inlayHints = { callArgumentNames = true },
+                        diagnosticSeverityOverrides = {
+                            reportUnknownMemberType = "information",
+                            reportUnknownVariableType = "none",
+                            reportUnknownArgumentType = "none",
+                            reportMissingTypeStubs = "none",
+                            reportPrivateImportUsage = "none",
+                        },
+                    },
+                },
+            },
+        })
+
+        -- Belt-and-braces: stop any rust_analyzer client that mason-lspconfig may
+        -- have already enabled before this exclude landed (only takes effect on
+        -- next nvim restart for already-attached buffers).
+        vim.lsp.enable("rust_analyzer", false)
 
         -- ── Inlay hints auto-enable & toggle ──────────────────────────────────────
         local ih_enabled = true
@@ -196,10 +175,12 @@ return {
                 end
 
                 map("gd", vim.lsp.buf.definition, "Go to definition")
-                map("gr", function() require("trouble").toggle("lsp_references") end, "References (Trouble)")
-                map("gR", vim.lsp.buf.references, "References (quickfix)")
                 map("gD", vim.lsp.buf.declaration, "Go to declaration")
-                map("gi", vim.lsp.buf.implementation, "Go to implementation")
+                -- nvim 0.11+ ships built-in defaults: grn (rename), gri (impl),
+                -- gra (code action), grt (type def). We override grr to route
+                -- references through Trouble instead of the default loclist.
+                map("grr", function() require("trouble").toggle("lsp_references") end, "References (Trouble)")
+                map("gR", vim.lsp.buf.references, "References (quickfix)")
                 map("<leader>h", function() vim.lsp.buf.hover({ border = _border }) end, "Hover documentation")
                 map("<leader>H", function()
                     local client = vim.lsp.get_clients({ bufnr = event.buf })[1]

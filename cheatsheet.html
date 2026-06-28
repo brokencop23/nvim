@@ -296,7 +296,7 @@
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>p</kbd><kbd>W</kbd><kbd>s</kbd></td><td>Grep WORD under cursor</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>p</kbd><kbd>s</kbd></td><td>Grep string (prompted)</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>d</kbd><kbd>s</kbd></td><td>Document symbols</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>w</kbd><kbd>s</kbd></td><td>Workspace symbols</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>f</kbd><kbd>S</kbd></td><td>Workspace symbols</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>f</kbd><kbd>t</kbd></td><td>Find TODOs</td></tr>
     </table>
     <div class="sep"></div>
@@ -311,8 +311,11 @@
     <table>
       <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>d</kbd></td><td>Go to definition</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>D</kbd></td><td>Go to declaration</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>i</kbd></td><td>Go to implementation</td></tr>
-      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd></td><td>References (Trouble)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd><kbd>i</kbd></td><td>Go to implementation (nvim 0.11 default)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd><kbd>t</kbd></td><td>Go to type definition (nvim 0.11 default)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd><kbd>r</kbd></td><td>References (Trouble — overrides default)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd><kbd>n</kbd></td><td>Rename symbol (nvim 0.11 default)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>r</kbd><kbd>a</kbd></td><td>Code action (nvim 0.11 default)</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>g</kbd><kbd>R</kbd></td><td>References (quickfix)</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>h</kbd></td><td>Hover documentation</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>c</kbd><kbd>a</kbd></td><td>Code action</td></tr>
@@ -503,6 +506,8 @@
       <tr><td><kbd>Space</kbd><kbd>r</kbd></td><td>Refactor</td></tr>
       <tr><td><kbd>Space</kbd><kbd>t</kbd></td><td>Test</td></tr>
       <tr><td><kbd>Space</kbd><kbd>n</kbd></td><td>Neogen (doc generation)</td></tr>
+      <tr><td><kbd>Space</kbd><kbd>R</kbd></td><td>Rust (rustaceanvim)</td></tr>
+      <tr><td><kbd>Space</kbd><kbd>C</kbd></td><td>Crates (Cargo.toml)</td></tr>
       <tr><td><kbd>Space</kbd><kbd>q</kbd></td><td>Quit</td></tr>
     </table>
   </div>
@@ -513,6 +518,62 @@
     <table>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>n</kbd><kbd>f</kbd></td><td>Generate function doc</td></tr>
       <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>n</kbd><kbd>t</kbd></td><td>Generate type doc</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── RUST (RUSTACEANVIM) ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--orange)"></span>Rust (rustaceanvim)</h2>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">CODE ACTIONS &amp; NAVIGATION (rust buffers only)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>a</kbd></td><td>Code action (grouped)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>h</kbd></td><td>Hover actions (chain follow-ups)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>e</kbd></td><td>Explain error (rustc --explain)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>p</kbd></td><td>Go to parent module</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>c</kbd></td><td>Open Cargo.toml</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>d</kbd></td><td>Open docs.rs for symbol</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">RUN &amp; DEBUG</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>r</kbd></td><td>Runnables menu</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>D</kbd></td><td>Debuggables menu (codelldb)</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">MACRO &amp; IR</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>m</kbd></td><td>Expand macro recursively</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>H</kbd></td><td>View HIR</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>M</kbd></td><td>View MIR</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>R</kbd><kbd>j</kbd></td><td>Join lines (rust-aware)</td></tr>
+    </table>
+  </div>
+
+  <!-- ───────────── CRATES.NVIM ───────────── -->
+  <div class="card">
+    <h2><span class="dot" style="background:var(--orange)"></span>Crates.nvim (Cargo.toml)</h2>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">INFO POPUPS</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>v</kbd></td><td>Show versions</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>f</kbd></td><td>Show features</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>d</kbd></td><td>Show dependencies</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">UPDATE / UPGRADE</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>u</kbd></td><td>Update crate (respect semver)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>a</kbd></td><td>Update all crates</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>U</kbd></td><td>Upgrade crate (break semver)</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>A</kbd></td><td>Upgrade all crates</td></tr>
+    </table>
+    <div class="sep"></div>
+    <table>
+      <tr><td colspan="2" style="color:var(--text-dim);font-size:11px;padding-bottom:4px">LINKS &amp; UTIL</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>H</kbd></td><td>Open homepage</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>R</kbd></td><td>Open repository</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>D</kbd></td><td>Open docs.rs</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>t</kbd></td><td>Toggle crates</td></tr>
+      <tr><td><span class="mode mode-n">N</span> <kbd>Space</kbd><kbd>C</kbd><kbd>r</kbd></td><td>Reload crate data</td></tr>
     </table>
   </div>
 
